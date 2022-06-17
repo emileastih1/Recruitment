@@ -1,6 +1,7 @@
 package com.tasks.coursemanagment.model.entity;
 
 import com.tasks.coursemanagment.common.model.entity.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Where(clause = "deleted <> true")
 @SQLDelete(sql = "UPDATE {h-schema} course SET deleted=true WHERE id =?",check = ResultCheckStyle.COUNT)
 @NoArgsConstructor
+@AllArgsConstructor
 public class Course extends BaseEntity {
 
     @Column(name = "name", unique = true)
@@ -24,7 +26,7 @@ public class Course extends BaseEntity {
 
     @Column(name = "description")
     private String description;
-
+//
     @Column(name = "steps")
     @ElementCollection
     private Set<String> steps;

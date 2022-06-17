@@ -6,8 +6,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
@@ -23,13 +26,11 @@ public class SecurityManualConfig extends WebSecurityConfigurerAdapter {
         //firstStudent/firstStudentPass
         //secondStudent/secondStudentPass
         auth.inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder().encode("firstStudentPass")).roles("admin")
+                .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN")
                 .and()
                 .withUser("firstStudent").password(passwordEncoder().encode("firstStudentPass")).roles("USER")
                 .and()
-                .withUser("secondStudent").password(passwordEncoder().encode("secondStudentPass")).roles("USER")
-                .and()
-                .withUser("admin").password(passwordEncoder().encode("adminPass")).roles("ADMIN");
+                .withUser("secondStudent").password(passwordEncoder().encode("secondStudentPass")).roles("USER");
 
     }
 
@@ -45,5 +46,16 @@ public class SecurityManualConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated().and()
                 .httpBasic();//normail username /password in header
 //                 .and().oauth2ResourceServer().jwt(); //using jwt authurization
+    }
+
+    @Bean
+    public InMemoryUserDetailsManager userDetailsService() {
+        //could be customized with Entity User
+        UserDetails user = User.builder()
+                .username("admin")
+                .password("admin")
+                .roles("ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(user);
     }
 }
