@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Setter @Getter
 @NoArgsConstructor
@@ -26,5 +27,10 @@ public class BaseEntity {
 
     @Column(name = "created_by")
     private String created_by;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,8 +33,20 @@ public class Student extends BaseEntity {
 
     @Transient
     private int getAge(){
+        if(ObjectUtils.isEmpty(birthOfDate)) return 0;
         Period between = Period.between(LocalDate.now(), getBirthOfDate());
         return between.getYears();
     };
 
+    @Override
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) return true;
+        if(ObjectUtils.isEmpty(obj)) return false;
+        if(!(obj instanceof Course)) return false;
+        Student studentObj= (Student) obj;
+        return this.getId().equals(studentObj.getId())
+                && this.getName().equals(studentObj.getName())
+                && this.getBirthOfDate().equals(studentObj.getBirthOfDate());
+
+    }
 }

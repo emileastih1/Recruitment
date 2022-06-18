@@ -8,8 +8,10 @@ import lombok.Setter;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Setter @Getter
@@ -43,4 +45,16 @@ public class Course extends BaseEntity {
             inverseJoinColumns = { @JoinColumn(name = "student_id") }
     )
     private Set<Student> student;
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if(super.equals(obj)) return true;
+        if(ObjectUtils.isEmpty(obj)) return false;
+        if(!(obj instanceof Course)) return false;
+        Course courseObj= (Course) obj;
+        return this.getId().equals(courseObj.getId());
+
+    }
+
 }
